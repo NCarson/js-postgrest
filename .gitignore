@@ -1,0 +1,8 @@
+lib
+node_modules
+public/index.html
+public/index.json
+public/dist
+index.json
+*.swp
+*.gz
