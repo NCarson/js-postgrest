@@ -1,5 +1,6 @@
 
-import {Fetcher, Query} from './Postgrest'
+import Fetcher from './PostgrestFetcher'
+import Query from './PostgrestQuery'
 
 const fetcher = new Fetcher(true)
 const host = 'https://postgrest-test.chessindex.org'
@@ -9,20 +10,18 @@ const not_found = '/not_here'
 
 function logGet(fetcher, href, headers, count) {
     console.log("fetching " + href, count)
-    const response = fetcher.get(href, headers, count).then(response => { 
+    fetcher.get(href, headers, count).then(response => { 
         console.log(response.headers, response.data) 
-    }).catch((error, old_error) => {
-        console.error('get failed:', error, old_error)
+    }).catch((error) => {
+        console.error('get failed:', error)
     })
 }
 
-/*
 logGet(fetcher, host + default_q)
 // badhost
 logGet(fetcher, badhost + default_q)
 // 404
 logGet(fetcher, host + not_found)
-*/
 
 var query = new Query()
 console.log(query.toSearch())
