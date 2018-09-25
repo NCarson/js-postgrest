@@ -11,7 +11,6 @@ module.exports = {
     ],
     "parserOptions": {
         "ecmaFeatures": {
-            "jsx": true
         },
         "ecmaVersion": 2018,
         "sourceType": "module"
@@ -34,8 +33,6 @@ module.exports = {
 
         "import/no-unresolved": "warn",
 
-        "react/prop-types": "warn",
-        "react/no-find-dom-node" : "off",
         //endmine
 
     }

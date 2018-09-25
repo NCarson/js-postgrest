@@ -1,0 +1,32 @@
+
+#postgrest conf
+
+# swagger ui doc gen
+# https://petstore.swagger.io/
+#
+server-port = 4099
+# remember that db has to accessible to user in hba_conf
+db-uri = "postgres://web_app@localhost/postgrest-test"
+db-schema = "public"
+db-anon-role = "web_app" 
+db-pool = 1
+
+server-host = "127.0.0.1"
+
+## base url for swagger output
+# server-proxy-uri = ""
+
+## choose a secret to enable JWT auth
+## (use "@filename" to load from separate file)
+# jwt-secret = "foo"
+# secret-is-base64 = false
+# jwt-aud = "your_audience_claim"
+
+## limit rows in response
+# max-rows = 1000
+
+## stored proc to exec immediately after auth
+# pre-request = "stored_proc_name"
+
+## jspath to the role claim key
+# role-claim-key = ".role"

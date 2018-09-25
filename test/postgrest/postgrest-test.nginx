@@ -1,0 +1,30 @@
+
+#posgrest
+# upstream configuration
+upstream postgrest-test {
+  server localhost:4099;
+  keepalive 64;
+}
+
+#posgrest 
+server {
+	server_name postgrest-test.chessindex.org;
+	listen 80 ;
+	listen [::]:80 ;
+
+    add_header Cache-Control "private";
+
+    # expose to the outside world
+    location / {
+      add_header Cache-Control "private";
+      default_type  application/json;
+      proxy_hide_header Content-Location;
+      add_header Content-Location  $upstream_http_content_location;
+      proxy_set_header  Connection "";
+      proxy_http_version 1.1;
+      proxy_pass http://postgrest-test;
+    }
+
+    access_log /var/log/nginx/postgrest-test.chessindex.ml.access.log;
+    error_log /var/log/nginx/postgrest-test.chessindex.ml.error.log;
+}

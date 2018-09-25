@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-import Config from './config'
-
 class Param {
 
     constructor(op, column, val) {
@@ -12,6 +10,10 @@ class Param {
     toString() {
         return this.column + '=' + this.op + '.' + this.val
     }
+
+    toHeaders() {
+        return {}
+    }
 }
 
 class ValueParam {
@@ -21,6 +23,10 @@ class ValueParam {
     }
     toString() {
         return this.op + '=' + this.val
+    }
+
+    toHeaders() {
+        return {}
     }
 }
 
@@ -34,6 +40,37 @@ class OrderParam {
     toString() {
         return (`order=${this.column}${this.asc ? '' : '.desc'}${this.nulls_last ? '' : '.nullslast'}`)
     }
+
+    toHeaders() {
+        return {}
+    }
+}
+
+class PaginationParam {
+
+    constructor(page, limit) {
+
+        this.limit = Math.floor(Number(limit))
+        this.page = Math.floor(Number(page))
+
+        if (this.limit < 1)
+            throw 'Pagination: limit must be greater than 0'
+        if (this.page < 1)
+            throw 'Pagination: page must be greater than 0'
+    }
+
+    toString() {
+        return ''
+    }
+
+    toHeaders() {
+        const first = this.limit * (this.page-1)
+        const last = this.limit * this.page - 1
+        var headers = {}
+        headers.Range = `${first}-${last}`
+        headers.ResultPageSize = this.limit
+        return headers
+    }
 }
 
 class RawParam {
@@ -44,6 +81,10 @@ class RawParam {
     toString() {
         return this.value
     }
+
+    toHeaders() {
+        return {}
+    }
 }
 
 
@@ -53,10 +94,16 @@ export class Query {
         this.params = []
     }
 
-    toString() {
+    toSearch() {
         if (!this.params)
             return ''
         return '?' + (this.params.map(x => x.toString())).join('&')
+    }
+
+    toHeaders() {
+        var headers = {}
+        this.params.map(x => Object.assign(headers, x.toHeaders()))
+        return headers
     }
 
     clear() {
@@ -68,6 +115,11 @@ export class Query {
         return this
     }
 
+    paginate(page=1, limit=20) {
+        this.params.push(new PaginationParam(page, limit))
+        return this
+    }
+
     raw(value) {
         this.params.push(new RawParam(value))
         return this
@@ -76,6 +128,7 @@ export class Query {
     combine(other) {
         this.params.push(other.params)
     }
+
 }
 
 const ops = ['eq', 'gt', 'lt', 'gte', 'lte', 'like', 'ilike', 'is', 'in', 'not', 'fts', 'plfts', 'pfhts']
@@ -96,129 +149,84 @@ value_ops.forEach(filter =>
   }
 )
 
-export class Adapter {
-    constructor(host, exact_count=true) {
-        this.host = host 
-        this.exact_count = exact_count
+
+export class Fetcher {
+    constructor(debug=false) {
+        this.debug = debug
     }
 
-    get(q, first=null, last=null) {
-        let params = this.exact_count ? {headers : { Prefer: 'count=exact', 'Cache-Control': 'public, max-age=3600,  s-max-age=3600'}} : { headers :{}}
+    get(href, headers={}, count=false) {
+
         let config = {}
-        if (first !== null || last !== null) {
-            params.headers.Range = `${first}-${last}`
+        let params = {headers:{}}
+
+        Object.assign(params.headers, headers)
+        if (count) {
+            params.headers.Prefer = 'count=exact'
         }
 
-        Config.log('Adapter.get', this.host + q, params)
-        return axios.get(this.host + q, params, config)
-            .then(response => new Response(response))
-            .catch(error => this.on_error(error))
+        console.log(href, params)
+
+        //this.debug && console.log('Fetcher.get', href, params)
+        return axios.get(href, params, config)
+            .then(response => new Response(response, headers.ResultPageSize))
+            .catch(error => this.onError(error))
 	}
 
-    on_error(error) {
-
-        //console.log(Object.getOwnPropertyNames(error.request.socket))
-        var path = null
-        if (error.request.socket)
-            path = (`${error.request.method} ${error.request.socket._host} ${error.request.path} `)
-        else
-            path = ''
-        
-        console.error(`Adapter: ${path}${error.message}`)
-        if (error.response && error.response.data && error.response.data.message) {
-            console.error("Adapter:" + error.response.data.message)
-            if (error.response.data.details)
-                console.error("Adapter:" + error.response.data.details)
+    onError(error) {
+        var new_error = {
+            status: (error.response && error.response.status) || error.errno,
+            statusMsg : (
+                (error.response && error.response.data && error.response.data.message)
+                || (error.response && error.response.statusText) 
+                || error.code),
+            statusDetails:  error.response && error.response.data && error.response.data.details,
+            statusHint:  error.response && error.response.data && error.response.data.hint,
         }
-        throw ("Adapter: request failed", error)
-
+        throw (new_error)
     }
 }
 
+    /*
+    count(page, response) {
+        //FIXME
+        if (response) {
+            this.page_count = Math.floor(response.count / this.per_page)
+            if (response.count % this.per_page)
+                this.page_count += 1
+        }
+    }
+    */
+
 export class Response {
 
-    constructor(response) {
+    constructor(response, page_size) {
+
+        //console.log('page size', page_size)
         this.status = parseInt(response.status)
-        this.pagination = false
         if (this.status == 206) {
             this.pagination = true
         } else if (this.status != 200)
             console.warn("non 200 response: " + this.status + response.headers['content-location'])
 
         this.headers = response.headers
-        let res = this.headers['content-range'].split('/')
-        this.count = res[1] != '*' ? parseInt(res[1]) : null
-        res = res[0].split('-')
-        this.first = parseInt(res[0])
-        this.last = parseInt(res[1])
+        //console.log(this.headers)
+        if (this.headers['content-range']) {
+            let res = this.headers['content-range'].split('/')
+            this.count = res[1] != '*' ? parseInt(res[1]) : null
+            res = res[0].split('-')
+            this.first = parseInt(res[0])
+            this.last = parseInt(res[1])
+
+            if (page_size && this.count) {
+                this.page_count = Math.floor(this.count / page_size)
+                //if (this.count % page_size)
+                //   this.page_count += 1
+            } else
+                this.page_count = null
+        }
+        //console.log('page count', this.page_count)
         this.data = response.data
     }
 }
-
-export class Pagination {
-    constructor(host, view, limit) {
-        if (!host)
-            throw 'host var should be non-empty string'
-        if (!view)
-            throw 'view var should be non-empty string'
-        this.adapter = new Adapter(host)
-        this.view  = view.charAt(0) == '/' ? view : '/' + view
-        this.limit = limit
-        this.reset()
-    }
-
-    reset() {
-        this.query = null
-        this.page_count = null
-        this.pages = null
-        this.count = null
-    }
-
-    set_query(query) {
-        if (this.query != query)
-            this.reset()
-        this.query = query
-    }
-
-    get(page=1) {
-        if (this.query === null) {
-            throw 'Pagination: set_query(q) has to be called before get()'
-        }
-        if (page < 1)
-            throw 'page must be greater than 0'
-            /*
-		if (this.pages !== null && this.pages[page]) {
-            console.log('cached')
-			return new Promise( resolve(this.pages[page]))
-		}
-        */
-        let range = this.get_range(page)
-        return this.adapter.get(this.view + this.query, range[0], range[1])
-            .then(response => this.pages === null ? this.init_pages(page, response) : this.on_response(page, response))
-    }
-
-    init_pages(page, response) {
-        if (response) {
-            this.page_count = Math.floor(response.count / this.limit)
-            if (response.count % this.limit)
-                this.page_count += 1
-            this.pages = Array.apply(null, Array(this.page_count))
-            return this.on_response(page, response)
-        }
-    }
-
-    on_response(page, response) {
-        this.pages[page] = response
-        this.count = response.count
-        response.pagenum = page
-        response.page_count = this.page_count
-        return response
-    }
-
-    get_range(page) {
-        let n = (page-1) * this.limit
-        return [n, n+this.limit-1]
-    }
-}
-
 

@@ -34,11 +34,11 @@ FAKING_IT := $(shell ruby script/test_config.rb $(NODE_DEV))
 ###############################################################################
 
 # plugins
-BABEL_PLUGINS := --plugins transform-react-jsx --plugins transform-class-properties
-BROWSERIFY_SHIM := --transform browserify-global-shim 
+BABEL_PLUGINS := --plugins syntax-async-functions --plugins transform-class-properties
+BROWSERIFY_SHIM := 
 
 # these should be installed globally
-BABEL := babel $(BABEL_PLUGINS) --presets=es2015,react
+BABEL := babel $(BABEL_PLUGINS) --presets=es2015
 BROWSERIFY := browserify
 ROLLUP := rollup
 UGLIFYJS := uglifyjs
@@ -49,7 +49,7 @@ GZIP := gzip
 ifdef NO_LINT
 	LINTER := true
 else
-	LINTER := eslint --parser babel-eslint --plugin react --plugin import
+	LINTER := eslint --parser babel-eslint --plugin import
 endif
 
 WWW_USER = www-data
@@ -148,6 +148,9 @@ install:
 dist:
 	$(ROLLUP) lib/$(MAIN_ENTRY) -n $(MODULE_NAME) -f umd -o $(PUBLISH_DIR)/index.js -c .rollup.config.js 
 	npm publish
+
+setup-test:
+	cd test && make
 	
 ###############################################################################
 # rules
