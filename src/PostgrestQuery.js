@@ -1,11 +1,8 @@
-
-
-
 class BaseParam {
     toString() {
         return ''
     }
-    toHeaders() {
+    toConfig() {
         return {}
     }
 }
@@ -52,22 +49,17 @@ class PaginationParam extends BaseParam {
     constructor(page, limit) {
 
         super()
-        this.limit = Math.floor(Number(limit))
-        this.page = Math.floor(Number(page))
-
-        if (this.limit < 1)
-            throw 'Pagination: limit must be greater than 0'
-        if (this.page < 1)
-            throw 'Pagination: page must be greater than 0'
+        this.page = page
+        this.limit = limit
     }
 
-    toHeaders() {
+    toConfig() {
         const first = this.limit * (this.page-1)
         const last = this.limit * this.page - 1
         var headers = {}
         headers.Range = `${first}-${last}`
         headers.ResultPageSize = this.limit
-        return headers
+        return {headers: headers}
     }
 }
 
@@ -95,17 +87,12 @@ export default class PostgrestQuery {
         return '?' + (this.params.map(x => x.toString())).join('&')
     }
 
-    toHeaders() {
-        var headers = {}
-        this.params.map(x => Object.assign(headers, x.toHeaders()))
-        return headers
-    }
-
-    toRequest () {
-        return {
-            string: this.toSearch(),
-            header: this.toHeaders,
-        }
+    toConfig() {
+        var config = {}
+        this.params.map(x => {
+            Object.assign(config, x.toConfig())
+        })
+        return config
     }
 
     clear() {
@@ -117,7 +104,7 @@ export default class PostgrestQuery {
         return this
     }
 
-    paginate(page=1, limit=20) {
+    paginate(page, limit) {
         this.params.push(new PaginationParam(page, limit))
         return this
     }
@@ -128,7 +115,7 @@ export default class PostgrestQuery {
     }
 
     combine(other) {
-        this.params.push(other.params)
+        this.params = this.params.concat(other.params)
     }
 
 }
