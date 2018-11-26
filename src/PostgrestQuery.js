@@ -109,6 +109,11 @@ export default class PostgrestQuery {
         return this
     }
 
+    argument(name, value) {
+        this.params.push(new ValueParam(name, value))
+        return this
+    }
+
     raw(value) {
         this.params.push(new RawParam(value))
         return this
