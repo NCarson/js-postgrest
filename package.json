@@ -1,21 +1,23 @@
 {
-  "name": "makefile-node-template",
-  "version": "1.0.0",
-  "description": "Makefile to compile node.js incrementally",
+  "name": "js-postgrest",
+  "version": "0.1.0",
+  "description": "JS api to call Postgrest",
   "main": "dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NCarson/js-postgrest.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "NCarson",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "axios": "^0.18.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
