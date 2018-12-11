@@ -64,6 +64,10 @@ ONLY_INCLUDE = $(MFS_EXCLUDED_LIBS) | grep -Fx -v -f - $(DEP_FILE)
 INC_DEPS = $(shell $(ONLY_INCLUDE) | sed 's/ / -r /g' | sed 's/^/ -r /')
 .PRECIOUS: %/$(UMD_BASENAME).js
 
+## other libraries
+#%.lib.js: %.js $(DEP_FILE)
+#	$(call mjs_make_bundle,lib,$*.lib.js,$<,$(EXC_DEPS),lib)
+
 ## umd bundle
 %/$(UMD_BASENAME).js: $(ES5_FILES) $(DEP_FILE)
 	$(call mjs_make_bundle,umd,$@,$(ES5_FILES),$(EXC_DEPS),$(UMD_BASENAME),-s $(UMD_BASENAME))
