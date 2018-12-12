@@ -12,7 +12,7 @@
 
 BASE_DIR := ..
 TARGET_DIR := $(BASE_DIR)/lib
-TARGETS := $(TARGET_DIR)/PostgrestFetcher.js $(TARGET_DIR)/PostgrestQuery.js
+TARGETS := $(TARGET_DIR)/postgrest-fetcher.js $(TARGET_DIR)/postgrest-query.js
 
 #EXCL_SRC_DIRS := ./codesplit ./umd
 
