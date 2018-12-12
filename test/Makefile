@@ -14,4 +14,7 @@ all: tables
 tables:
 	$(PSQL) -f tables.sql -v user=$(USER) -v direc=$(DATA_DIR)
 
+test:
+	ava test.js
+
 

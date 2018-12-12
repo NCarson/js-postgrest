@@ -1,38 +1,85 @@
 
-import Fetcher from './PostgrestFetcher'
-import Query from './PostgrestQuery'
+import test from 'ava'
 
-const fetcher = new Fetcher(true)
+import Fetcher from '../lib/PostgrestFetcher'
+import Query from '../lib/PostgrestQuery'
+
+const log = msg => {}
+
+function logGet(test, fetcher, href, headers, on_success, on_error) {
+    log("fetching " + href)
+    return fetcher.get(href, headers)
+        .then(response => {log('fetched:', href); return response})
+        .catch(error => {log('failed:', href); return error})
+}
+
+const fetcher = new Fetcher()
 const host = 'https://postgrest-test.chessindex.org'
 const badhost = 'https://fake.chessindex.org'
 const default_q = '/testing?limit=5'
 const not_found = '/not_here'
 
-function logGet(fetcher, href, headers, count) {
-    console.log("fetching " + href, count)
-    fetcher.get(href, headers, count).then(response => { 
-        console.log(response.headers, response.data) 
-    }).catch((error) => {
-        console.error('get failed:', error)
-    })
-}
+test('basic fetcher get', async t => {
+    const result = await logGet(t, fetcher, host + default_q)
+    t.truthy(result.status == 200 || result.status == 206)
+});
 
-logGet(fetcher, host + default_q)
-// badhost
-logGet(fetcher, badhost + default_q)
-// 404
-logGet(fetcher, host + not_found)
+test('basic badhost fail',  async t => {
+    const result = await logGet(t, fetcher, badhost + default_q)
+    t.is(result.status, 'ENOTFOUND')
+});
 
-var query = new Query()
-console.log(query.toSearch())
-query.order('i', false)
-console.log(query.toSearch())
-query.paginate(1, 5)
-console.log(query.toHeaders())
-query.raw('i=eq.5')
-query.gt('i', '1')
-console.log(query.toSearch())
-logGet(fetcher, host + '/testing' + query.toSearch(), query.toHeaders(), true)
-query.clear()
-console.log(query.toSearch())
+test('basic 404 fail',  async t => {
+    const result = await logGet(t, fetcher, host + not_found)
+    t.is(result.status, 404)
+});
+
+test('basic query',  t => {
+    var query = new Query()
+    log(query.toSearch())
+    t.is('?', query.toSearch())
+});
+
+test('paginate query',  t => {
+    var query = new Query()
+    query.paginate(1, 20)
+    log(query.toConfig())
+    const conf = query.toConfig()
+    t.is('0-19', conf.headers.Range)
+    t.is(20, conf.headers.ResultPageSize)
+});
+
+test('order query',  t => {
+    var query = new Query()
+    query.order('i', false)
+    t.is('?order=i.desc', query.toSearch())
+});
+
+test('raw query',  t => {
+    var query = new Query()
+    query.raw('i=5')
+    t.is('?i=5', query.toSearch())
+});
+
+test('limit query',  t => {
+    var query = new Query()
+    query.limit(20)
+    log(query.toSearch())
+    t.is('?limit=20', query.toSearch())
+});
+
+test('offset query',  t => {
+    var query = new Query()
+    query.offset(5)
+    log(query.toSearch())
+    t.is('?offset=5', query.toSearch())
+});
+
+test('op query',  t => {
+    var query = new Query()
+    query.op('gt', 'i', '1')
+    log(query.toSearch())
+    t.is('?i=gt.1', query.toSearch())
+});
+
 

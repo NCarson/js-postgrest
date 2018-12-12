@@ -18,5 +18,8 @@ TARGETS := $(TARGET_DIR)/PostgrestFetcher.js $(TARGET_DIR)/PostgrestQuery.js
 
 include $(BASE_DIR)/.makefiles/conf.makefile
 
+docs: $(SRC_FILES)
+	documentation build $(SRC_FILES) -f html -o ../docs
+
 
 
