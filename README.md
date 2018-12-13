@@ -6,6 +6,14 @@
 Lean and mean api for using Postgrest. Only depends on axios http lib.
 Basically just wraps Postgrest api since it is already an ORM. No need
 to do it twice.
+
+### Doc
+
+[Api](https://ncarson.github.io/js-postgrest/index.html)
+
+### Basics
+
+
 ```js
 
 import {PostgrestFetcher as Fetcher} from 'js-postgrest'
@@ -40,8 +48,6 @@ result.data // great things happens here
 - Method chaining as methods that add paramaters return `this`.
 - GET method rpc function args with `query.argument` (see API doc)
 
-### API
-see [docs]()
 
 ### Install
 
@@ -62,11 +68,6 @@ or for individual imports ..
 ```js
 import PostgresteQuery from 'js-postgrest/lib/postgrest-query'
 import PostgresteFetcher from 'js-postgrest/lib/postgrest-fetcher'
-```
-
-#### CDN
-TODO
-```html
 ```
 
 ### TODO

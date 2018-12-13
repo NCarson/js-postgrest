@@ -266,7 +266,7 @@
   </div>
   
 
-  <p>Non-200 class error</p>
+  <p>Class returned from PostgrestFetcher on non-2** response (Not exported)</p>
 
  
   
@@ -573,7 +573,7 @@
   </div>
   
 
-  <p>Class returned from PostgrestFetcher promise (not exported).</p>
+  <p>Class returned from PostgrestFetcher promise (not exported).  *</p>
 
  
   
@@ -903,6 +903,18 @@
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">import</span> Fetcher <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/postgrest-fetcher'</span>
+<span class="hljs-keyword">const</span> fetcher = <span class="hljs-keyword">new</span> Fetcher()
+<span class="hljs-keyword">const</span> host = <span class="hljs-string">'https://postgrest-test.chessindex.org'</span>
+<span class="hljs-keyword">const</span> default_q = <span class="hljs-string">'/testing?limit=5'</span>
+<span class="hljs-keyword">const</span> results = <span class="hljs-keyword">await</span> fetcher.get(host + default_q)
+  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fetched:'</span>, href); <span class="hljs-keyword">return</span> response})
+  .catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'failed:'</span>, href); <span class="hljs-keyword">return</span> error})</pre>
+    
+  
 
   
 
@@ -922,7 +934,8 @@
 
   
 
-  
+  <p>returns promise from axios.get</p>
+
  
   
     <div class='pre p1 fill-light mt0'>get(url: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
@@ -1018,7 +1031,7 @@
   </div>
   
 
-  <p>Convienence object to build up Postgrest Queries</p>
+  <p>class to build up Postgrest Queries</p>
 
  
   
@@ -1042,6 +1055,26 @@
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">import</span> Query <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/postgrest-query'</span>
+<span class="hljs-keyword">import</span> Fetcher <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/postgrest-fetcher'</span>
+
+<span class="hljs-keyword">const</span> query = <span class="hljs-keyword">new</span> Query()
+query.paginate(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>)
+query.op(<span class="hljs-string">'eq'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-number">4</span>)
+
+<span class="hljs-keyword">const</span> conf = query.toConfig()
+<span class="hljs-keyword">const</span> search = query.toSearch()
+<span class="hljs-keyword">const</span> host = <span class="hljs-string">'https://postgrest-test.chessindex.org'</span>
+<span class="hljs-keyword">const</span> table = <span class="hljs-string">'/testing'</span>
+
+<span class="hljs-keyword">const</span> results = <span class="hljs-keyword">await</span> fetcher.get(host + table + search, conf)
+  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fetched:'</span>, href); <span class="hljs-keyword">return</span> response})
+  .catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'failed:'</span>, href); <span class="hljs-keyword">return</span> error})</pre>
+    
   
 
   
