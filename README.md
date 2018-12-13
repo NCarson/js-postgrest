@@ -7,6 +7,8 @@ Lean and mean api for using Postgrest. Only depends on axios http lib.
 Basically just wraps Postgrest api since it is already an ORM. No need
 to do it twice.
 
+![bundlephobia](https://badgen.net/bundlephobia/minzip/js-postgrest)
+
 ### Doc
 
 [Api](https://ncarson.github.io/js-postgrest/index.html)

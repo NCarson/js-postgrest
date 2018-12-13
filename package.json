@@ -2,7 +2,7 @@
   "name": "js-postgrest",
   "version": "0.1.0",
   "description": "JS api for calling Postgrest",
-  "main": "dist/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/NCarson/js-postgrest.git"
