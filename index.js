@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PostgrestQuery = exports.PostgrestFetcher = undefined;
 
-var _postgrestFetcher = require('./lib/postgrest-fetcher.js');
+var _postgrestFetcher = require('./lib/PostgrestFetcher.js');
 
 var _postgrestFetcher2 = _interopRequireDefault(_postgrestFetcher);
 
-var _postgrestQuery = require('./lib/postgrest-query.js');
+var _postgrestQuery = require('./lib/PostgrestQuery.js');
 
 var _postgrestQuery2 = _interopRequireDefault(_postgrestQuery);
 

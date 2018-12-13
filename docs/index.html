@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>js-postgrest 0.0.1 | Documentation</title>
+  <title>js-postgrest 0.1.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>js-postgrest</h3>
-          <div class='mb1'><code>0.0.1</code></div>
+          <div class='mb1'><code>0.1.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -906,7 +906,7 @@
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">import</span> Fetcher <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/postgrest-fetcher'</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">import</span> Fetcher <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/PostgrestFetcher'</span>
 <span class="hljs-keyword">const</span> fetcher = <span class="hljs-keyword">new</span> Fetcher()
 <span class="hljs-keyword">const</span> host = <span class="hljs-string">'https://postgrest-test.chessindex.org'</span>
 <span class="hljs-keyword">const</span> default_q = <span class="hljs-string">'/testing?limit=5'</span>
@@ -1059,8 +1059,8 @@
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">import</span> Query <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/postgrest-query'</span>
-<span class="hljs-keyword">import</span> Fetcher <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/postgrest-fetcher'</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">import</span> Query <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/PostgrestQuery'</span>
+<span class="hljs-keyword">import</span> Fetcher <span class="hljs-keyword">from</span> <span class="hljs-string">'js-postgrest/lib/PostgrestFetcher'</span>
 
 <span class="hljs-keyword">const</span> query = <span class="hljs-keyword">new</span> Query()
 query.paginate(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>)

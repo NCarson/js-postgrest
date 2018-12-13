@@ -1,6 +1,6 @@
 {
   "name": "js-postgrest",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "JS api for calling Postgrest",
   "main": "dist/index.js",
   "repository": {

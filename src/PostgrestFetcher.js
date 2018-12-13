@@ -1,21 +1,8 @@
-/** @module postgrest-fetcher
- * @example 
-
-import Fetcher from 'js-postgrest/lib/postgrest-fetcher'
-
-const fetcher = new Fetcher()
-const host = 'https://postgrest-test.chessindex.org'
-const default_q = '/testing?limit=5'
-const results = await fetcher.get(host + default_q)
-*   .then(response => {console.log('fetched:', href); return response})
-*   .catch(error => {console.log('failed:', href); return error})
-*/
-
 import axios from 'axios'
 
 const pretty = (obj) => JSON.stringify(obj, null, 2); // spacing level = 2
 
-/** Non-200 class error */
+/** Class returned from PostgrestFetcher on non-2** response (Not exported) */
 class PostgrestError {
 
     constructor(error){
@@ -32,8 +19,7 @@ class PostgrestError {
     }
 }
 
-/**Class returned from PostgrestFetcher promise (not exported). 
- **/
+/**Class returned from PostgrestFetcher promise (not exported).  **/
 class PostgrestResponse {
 
     constructor(response, page_size) {
@@ -67,13 +53,20 @@ class PostgrestResponse {
     }
 }
 
-
 /** Fetches Postgrest results.
  * @param {Object} [config={}]
  * @param {Boolean} [config.count=true] - request Postgrest run a seperate count query and return it in the results
  * @param {Boolean} [config.debug=false] - extra debugging info sent to logger
  * @param {function} [config.log=console.log] - logging function
  * @param {function} [config.warn=console.warn] - warning function
+ * @example 
+import Fetcher from 'js-postgrest/lib/PostgrestFetcher'
+const fetcher = new Fetcher()
+const host = 'https://postgrest-test.chessindex.org'
+const default_q = '/testing?limit=5'
+const results = await fetcher.get(host + default_q)
+*   .then(response => {console.log('fetched:', href); return response})
+*   .catch(error => {console.log('failed:', href); return error})
 */
 export default class PostgrestFetcher {
     constructor(config={}) {

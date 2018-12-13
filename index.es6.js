@@ -1,6 +1,6 @@
-import PostgrestFetcher from './lib/postgrest-fetcher.js'
+import PostgrestFetcher from './lib/PostgrestFetcher.js'
 export {PostgrestFetcher}
 
-import PostgrestQuery from './lib/postgrest-query.js'
+import PostgrestQuery from './lib/PostgrestQuery.js'
 export {PostgrestQuery}
 

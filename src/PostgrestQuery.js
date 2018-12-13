@@ -1,22 +1,3 @@
-/** @module postgrest-query
- * @example 
-import Query from 'js-postgrest/lib/postgrest-query'
-import Fetcher from 'js-postgrest/lib/postgrest-fetcher'
-
-const query = new Query()
-query.paginate(1, 20)
-query.op('eq', 'i', 4)
-
-const conf = query.toConfig()
-const search = query.toSearch()
-const host = 'https://postgrest-test.chessindex.org'
-const table = '/testing'
-
-const results = await fetcher.get(host + table + search, conf)
-*   .then(response => {console.log('fetched:', href); return response})
-*   .catch(error => {console.log('failed:', href); return error})
-*/
-
 class BaseParam {
     toString() {
         return ''
@@ -93,7 +74,24 @@ class RawParam extends BaseParam {
     }
 }
 
-/** Convienence object to build up Postgrest Queries */
+/** class to build up Postgrest Queries 
+ * @example 
+import Query from 'js-postgrest/lib/PostgrestQuery'
+import Fetcher from 'js-postgrest/lib/PostgrestFetcher'
+
+const query = new Query()
+query.paginate(1, 20)
+query.op('eq', 'i', 4)
+
+const conf = query.toConfig()
+const search = query.toSearch()
+const host = 'https://postgrest-test.chessindex.org'
+const table = '/testing'
+
+const results = await fetcher.get(host + table + search, conf)
+*   .then(response => {console.log('fetched:', href); return response})
+*   .catch(error => {console.log('failed:', href); return error})
+*/
 export default class PostgrestQuery {
 
     /**postgrest suppported operators  */
@@ -173,6 +171,7 @@ export default class PostgrestQuery {
      */
     combine(other) {
         this.params = this.params.concat(other.params)
+        return this
     }
 
     /** add a postgrest supported operator

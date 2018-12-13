@@ -48,7 +48,6 @@ result.data // great things happens here
 - Method chaining as methods that add paramaters return `this`.
 - GET method rpc function args with `query.argument` (see API doc)
 
-
 ### Install
 
 ```
@@ -59,15 +58,13 @@ npm i js-postgrest
 
 #### Node
 ```js
+//named imports ...
 import {PostgrestQuery} from 'js-postgrest'
 import {PostgrestFetcher} from 'js-postgrest'
-```
 
-or for individual imports ..
-
-```js
-import PostgresteQuery from 'js-postgrest/lib/postgrest-query'
-import PostgresteFetcher from 'js-postgrest/lib/postgrest-fetcher'
+//or for individual imports ...
+import PostgresteQuery from 'js-postgrest/lib/PostgrestQuery'
+import PostgresteFetcher from 'js-postgrest/lib/PostgrestFetcher'
 ```
 
 ### TODO
