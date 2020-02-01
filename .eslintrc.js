@@ -1,4 +1,6 @@
 module.exports = {
+    "settings": {
+    },
     "env": {
         "browser": true,
         "es6": true,
@@ -6,22 +8,19 @@ module.exports = {
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended",
         "plugin:import/errors"
     ],
     "parserOptions": {
-        "ecmaFeatures": {
-        },
         "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "plugins": [
-        "react"
     ],
     "rules": {
-
         //mine
+        "import/no-unresolved": "warn",
         "no-unused-vars": "warn",
+        "no-unsafe-finally": "off",
         "no-console": "off",
         "multiline-ternary": "off",
         "no-implicit-coercion": "off",
@@ -29,11 +28,7 @@ module.exports = {
         "no-unneeded-ternary": "off",
         "no-floating-decimal": "off",
         "max-lines-per-function": "off",
-        "no-mixed-spaces-and-tabs": "off",
-
-        "import/no-unresolved": "warn",
-
+        "no-mixed-spaces-and-tabs": "off"
         //endmine
-
     }
 };

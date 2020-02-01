@@ -1,4 +1,4 @@
-import axios from 'axios'
+const axios = require('axios')
 
 const pretty = (obj) => JSON.stringify(obj, null, 2); // spacing level = 2
 
