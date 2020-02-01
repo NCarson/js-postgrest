@@ -4,5 +4,7 @@ lib
 dist
 node_modules
 index.json
+package-lock.json
 *.swp
 *.gz
+src/out
