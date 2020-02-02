@@ -71,7 +71,7 @@ import PostgresteFetcher from 'js-postgrest/lib/PostgrestFetcher'
 
 ### TODO
 
-Anyting missing can still be done through PostgrestFetcher.get(url, config)
+Anything missing can still be done through PostgrestFetcher.get(url, config)
 as it basically just passes url and config to axios.get with same
 signature.
 
