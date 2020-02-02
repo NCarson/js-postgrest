@@ -1,0 +1,11 @@
+build/
+__pycache__/
+lib
+dist
+node_modules
+index.json
+package-lock.json
+*.swp
+*.gz
+src/out
+test/postgrest
