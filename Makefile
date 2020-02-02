@@ -30,3 +30,4 @@ npm-globalize:
 	cd node_modules && ln -s -f $(GLOBAL_NPM_DIR)/@babel
 	cd node_modules && ln -s -f $(GLOBAL_NPM_DIR)/babel-eslint
 	cd node_modules && ln -s -f $(GLOBAL_NPM_DIR)/eslint-plugin-import
+	cd node_modules && ln -s -f $(GLOBAL_NPM_DIR)/ava

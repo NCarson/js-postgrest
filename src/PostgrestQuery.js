@@ -92,7 +92,7 @@ const results = await fetcher.get(host + table + search, conf)
 *   .then(response => {console.log('fetched:', href); return response})
 *   .catch(error => {console.log('failed:', href); return error})
 */
-export default class PostgrestQuery {
+module.exports = class PostgrestQuery {
 
     /**postgrest suppported operators  */
     static supported_ops = [

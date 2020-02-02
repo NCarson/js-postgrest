@@ -1,10 +1,9 @@
+const test = require('ava')
 
-import test from 'ava'
+const Fetcher = require('../lib/PostgrestFetcher')
+const Query = require('../lib/PostgrestQuery')
 
-import Fetcher from '../lib/PostgrestFetcher'
-import Query from '../lib/PostgrestQuery'
-
-const log = msg => {}
+const log = msg => {console.log(msg)}
 
 function logGet(test, fetcher, href, headers, on_success, on_error) {
     log("fetching " + href)
@@ -14,9 +13,9 @@ function logGet(test, fetcher, href, headers, on_success, on_error) {
 }
 
 const fetcher = new Fetcher()
-const host = 'https://postgrest-test.chessindex.org'
-const badhost = 'https://fake.chessindex.org'
-const default_q = '/testing?limit=5'
+const host = 'http://127.0.0.1:3000'
+//const badhost = 'https://fake.chessindex.org'
+const default_q = '/v_testing?limit=5'
 const not_found = '/not_here'
 
 test('basic fetcher get', async t => {
@@ -24,10 +23,12 @@ test('basic fetcher get', async t => {
     t.truthy(result.status == 200 || result.status == 206)
 });
 
-test('basic badhost fail',  async t => {
+/*
+test('basic badhost fail',  async t => { FIXME
     const result = await logGet(t, fetcher, badhost + default_q)
     t.is(result.status, 'ENOTFOUND')
 });
+*/
 
 test('basic 404 fail',  async t => {
     const result = await logGet(t, fetcher, host + not_found)

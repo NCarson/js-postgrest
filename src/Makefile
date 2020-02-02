@@ -56,6 +56,7 @@ POST_ES6 :=1
 BASE_DIR :=..
 SRC_DIR :=.
 BUILD_DIR :=$(SRC_DIR)/build
+EXCL_SRC_DIRS :=./scratch
 
 ######################################
 #  UMD libary build
@@ -69,14 +70,14 @@ UMD_BASENAME :=postgrest#XXX this needs to be different from the source file nam
 #
 #    find all source files (on default export per file) and append ../lib direc to them
 #    leave out index as that probably goes in PROJECT_ROOT
-TARGETS := $(shell find . -path ./build -prune -o -name '*.js' -print \
+TARGETS := $(shell find . -path $(BUILD_DIR) -prune -o -name '*.js' -print \
 	| grep -v ^./index.js$ \
-	| awk '{print "$(TARGET_DIR)" $$0}'  \
+	| cut -b1-2 --complement \
+	| awk '{print "$(TARGET_DIR)/"$$0}'  \
 	)
 #TARGETS += $(patsubst %.js,%.min.js,$(TARGETS))# minified
 #TARGETS += $(patsubst %.js,%.min.js.gz,$(TARGETS))# gzipped
 TARGETS += ../index.js
-
 
 ######################################
 # Includes / Default Rules

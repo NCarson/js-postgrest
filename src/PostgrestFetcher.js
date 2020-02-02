@@ -6,6 +6,9 @@ const pretty = (obj) => JSON.stringify(obj, null, 2); // spacing level = 2
 class PostgrestError {
 
     constructor(error){
+        if (!error.response) {
+            throw error
+        }
         /** axios http status */
         this.status = (error.response && error.response.status) || error.errno
         /** axios response */
@@ -60,7 +63,7 @@ class PostgrestResponse {
  * @param {function} [config.log=console.log] - logging function
  * @param {function} [config.warn=console.warn] - warning function
  * @example 
-import Fetcher from 'js-postgrest/lib/PostgrestFetcher'
+const Fetcher = require ('js-postgrest/lib/PostgrestFetcher')
 const fetcher = new Fetcher()
 const host = 'https://postgrest-test.chessindex.org'
 const default_q = '/testing?limit=5'
@@ -68,7 +71,7 @@ const results = await fetcher.get(host + default_q)
 *   .then(response => {console.log('fetched:', href); return response})
 *   .catch(error => {console.log('failed:', href); return error})
 */
-export default class PostgrestFetcher {
+module.exports = class PostgrestFetcher {
     constructor(config={}) {
         this.config = {}
         this.config.count = config.count || true
