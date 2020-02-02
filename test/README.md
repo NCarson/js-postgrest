@@ -6,7 +6,7 @@ requires `ava` installed globaly `sudo npm -g install ava`
 
 Steps
 
-- Install postgrest binary in this direc https://github.com/PostgREST/postgrest/releases/tag/v6.0.2
+- Install postgrest binary in this direc https://github.com/PostgREST/postgrest/releases/
 
 - make sure your logged in as the postgresql super user (not the same as root)
 
